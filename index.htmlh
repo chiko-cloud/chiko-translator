@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ちこ語 翻訳機</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --border: #e0ddd6;
+  --text: #1a1916;
+  --muted: #8a8680;
+  --accent: #4a3f8c;
+  --accent-light: #ebe9f7;
+  --unknown: #9b3060;
+  --unknown-bg: #fdf0f5;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  min-height: 100vh;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ---- header ---- */
+header {
+  margin-bottom: 2.5rem;
+}
+
+.eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+hr.rule {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* ---- translator card ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-header {
+  display: grid;
+  grid-template-columns: 1fr 32px 1fr;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.lang-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lang-label.right {
+  text-align: right;
+  color: var(--accent);
+}
+
+.arrow {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+}
+
+.divider-v { background: var(--border); }
+
+.panel { padding: 1.25rem; }
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.85;
+  caret-color: var(--accent);
+}
+textarea::placeholder { color: #c0bdb8; font-size: 13px; }
+
+.output-text {
+  min-height: 150px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.placeholder { color: #c0bdb8; font-size: 13px; font-style: italic; }
+
+.unknown-token {
+  color: var(--unknown);
+  background: var(--unknown-bg);
+  border-radius: 3px;
+  padding: 0 3px;
+  font-size: 0.87em;
+}
+
+.card-footer {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg);
+}
+
+.hint { font-size: 11px; color: var(--muted); }
+
+.btn-row { display: flex; gap: 8px; }
+
+button {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 7px 18px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+}
+.btn-primary:hover { background: #3a3070; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+/* ---- grammar section ---- */
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.grammar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 6px;
+}
+
+.gc {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 12px;
+  background: var(--surface);
+}
+.gc .lbl { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+.gc .val { font-family: 'Cinzel', serif; font-size: 12px; color: var(--accent); letter-spacing: 0.05em; }
+
+/* ---- example chips ---- */
+.chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 0.75rem; }
+
+.chip {
+  font-size: 12px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 2em;
+  padding: 4px 13px;
+  cursor: pointer;
+  background: var(--surface);
+  transition: border-color 0.15s, color 0.15s;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- footer ---- */
+footer {
+  margin-top: 2.5rem;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 560px) {
+  .panels { grid-template-columns: 1fr; }
+  .divider-v { width: auto; height: 1px; }
+  .card-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <p class="eyebrow">Constructed Language · Chiko-go</p>
+    <h1>ちこ語 翻訳機</h1>
+    <p class="subtitle">木住野知子による自作言語 ― 日本語からちこ語へ</p>
+  </header>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="lang-label">日本語</span>
+      <span class="arrow">→</span>
+      <span class="lang-label right">ちこ語</span>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <textarea id="input" placeholder="日本語を入力&#10;&#10;例：私は神を愛した&#10;例：彼女は水を待っていた"></textarea>
+      </div>
+      <div class="divider-v"></div>
+      <div class="panel">
+        <div class="output-text" id="output">
+          <span class="placeholder">翻訳結果がここに表示されます</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="hint">Ctrl + Enter でも翻訳できます</span>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="clearAll()">クリア</button>
+        <button class="btn-primary" onclick="doTranslate()">翻訳する</button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div style="margin-bottom:1.5rem;">
+    <p class="section-title">例文を試す</p>
+    <div class="chips">
+      <span class="chip" onclick="setEx('私は新しい神を愛したが、丸いと思う')">私は新しい神を愛したが、丸いと思う</span>
+      <span class="chip" onclick="setEx('私は猫を愛したので神になる')">私は猫を愛したので神になる</span>
+      <span class="chip" onclick="setEx('村を愛していたが猫を愛すようになった')">村を愛していたが猫を愛すようになった</span>
+      <span class="chip" onclick="setEx('私は神を愛する')">私は神を愛する</span>
+      <span class="chip" onclick="setEx('私は神を愛した')">私は神を愛した</span>
+      <span class="chip" onclick="setEx('彼女は水を待っていた')">彼女は水を待っていた</span>
+      <span class="chip" onclick="setEx('神が生きる')">神が生きる</span>
+      <span class="chip" onclick="setEx('私は猫を食べる')">私は猫を食べる</span>
+      <span class="chip" onclick="setEx('彼は古い門にいた')">彼は古い門にいた</span>
+      <span class="chip" onclick="setEx('世界は変わる')">世界は変わる</span>
+      <span class="chip" onclick="setEx('彼女は美しい光を見た')">彼女は美しい光を見た</span>
+    </div>
+  </div>
+
+  <div>
+    <p class="section-title">文法規則</p>
+    <div class="grammar-grid">
+      <div class="gc"><div class="lbl">語順</div><div class="val">S → O → V</div></div>
+      <div class="gc"><div class="lbl">主格（は・が）</div><div class="val">語幹 + a</div></div>
+      <div class="gc"><div class="lbl">対格（を）</div><div class="val">語幹 + us</div></div>
+      <div class="gc"><div class="lbl">属格（の）</div><div class="val">語幹 + os</div></div>
+      <div class="gc"><div class="lbl">与格（に）</div><div class="val">語幹 + i</div></div>
+      <div class="gc"><div class="lbl">造格（で・により）</div><div class="val">語幹 + e</div></div>
+      <div class="gc"><div class="lbl">過去形</div><div class="val">動詞 + is</div></div>
+      <div class="gc"><div class="lbl">未来形</div><div class="val">動詞 + y</div></div>
+      <div class="gc"><div class="lbl">進行・反復</div><div class="val">動詞 + wa</div></div>
+      <div class="gc"><div class="lbl">完了</div><div class="val">動詞 + ja</div></div>
+      <div class="gc"><div class="lbl">名詞化</div><div class="val">語幹 + ik</div></div>
+      <div class="gc"><div class="lbl">複数形</div><div class="val">語幹 + er</div></div>
+    </div>
+  </div>
+
+  <footer style="margin-top:2rem;">
+    ちこ語（Chiko-go）&ensp;·&ensp;木住野知子 自作言語プロジェクト
+    &ensp;·&ensp; 接辞順：① アスペクト ② 時制 ③ 名詞化 ④ 格変化
+  </footer>
+
+</div>
+<script>
+/* =================================================================
+   DICTIONARY
+   ================================================================= */
+var NOUNS = {
+  "人類":"hom","人間":"hom","人":"hom","猫":"ab","星":"twink","宇宙":"areiz","服":"fat","国":"nait",
+  "月曜日":"aim","親":"him","子供":"hum","風":"var","光":"lum","水":"weip","火":"kaifar","道":"pat",
+  "成長":"iyan","ブランコ":"gowun","公園":"ayun","名前":"mein","研究":"poik","発表":"ponk","山":"rout",
+  "自然":"zam","調和":"fuup","友人":"sukom","友達":"sukom","旅":"wer","町":"haij","村":"haij","湖":"laq",
+  "人生":"que'r","暴力":"vorent","王様":"emp","王":"emp","神":"vair","世界":"ofi'ruk","門":"warp",
+  "召使い":"verap","下人":"verap","下":"sat",
+  "一":"un","二":"an","三":"in","四":"en","五":"kun","六":"san","七":"pun","八":"men","九":"fon","零":"ru'n",
+  "雨":"par","男":"kus","女":"ket","柱":"fokl","地震":"ronk","火事":"kaig","飢饉":"vour","飢餓":"vour",
+  "災害":"zient","災い":"zient","年":"jeis","幸せ":"feris","家族":"nous","様子":"nidep","有様":"nidep",
+  "記録":"sudor","丹":"wab","金":"gol","銀":"bol","木":"bin","端":"gig","薪":"teor","料金":"kinot",
+  "お金":"kinot","修理":"fikus","習慣":"debort","太陽":"piak","日":"piak","鴉":"bef","カラス":"bef",
+  "丸":"muras","円":"muras","丹塗り":"weab","歴史":"que'r","家":"nous","幸福":"feris","恥":"fori'n","もの":"youn",
+  "よう":"ravet",
+  "鴟尾":"shibi","まわり":"hupib","周囲":"hupib","上":"get","空":"venuy","夕焼け":"wauf","胡麻":"tibok"
+};
+
+var VERBS_BASE = {
+  "食べる":"feim","生きる":"reitiv","寝る":"perin","着る":"taom","死ぬ":"ziw","消える":"ziw",
+  "愛する":"viam","揺れる":"bowing","行く":"teik","向かう":"teik","帰る":"saren","喋る":"teof",
+  "話す":"teof","過ごす":"weist","怒る":"heri't","決める":"raid","与える":"pour","止まる":"ster",
+  "続く":"rest","待つ":"kouj","衰える":"bat","壊す":"poreit","砕く":"poreit","付く":"potted",
+  "重ねる":"yebuf","売る":"bair","気にする":"fam","騙す":"vurat","盗む":"fobug","取る":"diak",
+  "持つ":"diak","来る":"fut","棄てる":"aiw","捨てる":"aiw","思う":"sindr","考える":"kunib",
+  "変わる":"turip","集まる":"diopark","集う":"diopark","出る":"joud","見る":"hunk","なぞる":"hamik",
+  "なる":"nar","する":"yonk","いる":"wonk","ある":"deir",
+  "啼く":"dovel","鳴く":"dovel","飛ぶ":"rok","撒く":"mapuk","まく":"mapuk"
+};
+
+var ADJ = {
+  "可愛い":"tiam","美しい":"reipar","早い":"rap","悲しい":"sar","長い":"ians","新しい":"raip",
+  "醜い":"verip","多い":"cas","広い":"mupeir","大きい":"mupeir","狭い":"riepum","小さい":"riepum",
+  "丸い":"muren","強い":"ank","古い":"ant","良い":"marup","悪い":"veik","近い":"waset","遠い":"pioset",
+  "高い":"giban","赤い":"sorm"
+};
+
+var ADV = {
+  "とても":"ati","早く":"ripu","もう":"yungu","すでに":"eluto","少し":"sungu","なぜ":"perin",
+  "なぜならば":"purinsu","あと":"uti","など":"bunt","元々":"donb","また":"nen","いくつか":"roj",
+  "何故":"perin","全て":"aip","全員":"aip","誰でも":"aip",
+  "特に":"anke","ことに":"anke","はっきり":"kuja"
+};
+
+var CONJ  = {"だから":"rei","しかし":"nweri","でも":"nweri","すると":"teip","そして":"peno"};
+var PRON  = {"私":"chi","彼女":"ket","彼":"vent","君":"ain","俺":"eret","この":"ro","その":"po","あの":"ho","どの":"zo"};
+
+/* 接続助詞：CASEより前にマッチ。独立トークンとして出力 */
+var CONJ_PART = {
+  "けれども":"nweri","けれど":"nweri","のに":"nweri","ながら":"eutro","ても":"nweri","けど":"nweri",
+  "ので":"rei","から":"rei",
+  "と":"__QUOT__"  /* 引用格：直前の語に o を付ける */
+};
+
+var CASE = {
+  "においては":"iuris","において":"iuris",
+  "からは":"reak",
+  "までも":"amu","まで":"amu",
+  "のみ":"fet","だけ":"fet",
+  "でも":"aju","も":"aju",
+  "には":"i","では":"e","への":"i","は":"a","が":"a","を":"us","の":"os","に":"i","で":"e","へ":"i"
+};
+
+/* =================================================================
+   VERB EXPANSION
+   For every base verb form, generate conjugated surface forms
+   and map them directly to { base, tense }.
+   This sidesteps the fragile "stem + ending" matching problem.
+   ================================================================= */
+function buildVerbMap(baseDict) {
+  var map = {}; // surface_form -> { base, tense }
+
+  Object.keys(baseDict).forEach(function(dictForm) {
+    var base = baseDict[dictForm];
+
+    // The "dictionary form" itself = present (no tense suffix)
+    map[dictForm] = { base: base, tense: "" };
+
+    // Derive stem candidates from the dictionary form
+    // We generate all plausible surface forms for each verb class
+    var f = dictForm;
+
+    // Helper to register
+    function reg(surface, t) {
+      if (!map[surface]) map[surface] = { base: base, tense: t };
+    }
+
+    // --- する verbs (愛する, 気にする, ...) ---
+    if (f.slice(-2) === "する") {
+      var s = f.slice(0, -2); // stem before する
+      reg(s + "する",   "");
+      reg(s + "した",   "is");
+      reg(s + "し",     "");    // plain masu-stem
+      reg(s + "しない", "");
+      reg(s + "している","wa");
+      reg(s + "していた","wais");
+      reg(s + "してきた","jais");
+      reg(s + "す",     "");
+    }
+
+    // --- 一段 (ru-verbs): ends in る preceded by e/i sound ---
+    if (f.slice(-1) === "る") {
+      var stem = f.slice(0, -1);
+      reg(stem + "る",     "");
+      reg(stem + "た",     "is");
+      reg(stem + "て",     "");
+      reg(stem + "ている", "wa");
+      reg(stem + "ていた", "wais");
+      reg(stem + "てきた", "jais");
+      reg(stem + "ない",   "");
+      reg(stem + "ます",   "");
+      reg(stem + "ました", "is");
+      reg(stem + "ません", "");
+      reg(stem + "られた", "is");
+      reg(stem + "れる",   "");
+    }
+
+    // --- 五段 verbs: ends in く,ぐ,す,つ,ぬ,ぶ,む,う,る ---
+    // 待つ→待っ
+    if (f.slice(-1) === "つ") {
+      var stem = f.slice(0, -1);
+      reg(stem + "つ",   "");
+      reg(stem + "った",  "is");
+      reg(stem + "ち",    "");
+      reg(stem + "っている","wa");
+      reg(stem + "っていた","wais");
+      reg(stem + "ちます","");
+      reg(stem + "ちました","is");
+      reg(stem + "たない","");
+    }
+    // 行く→行っ / 聞く→聞い
+    if (f.slice(-1) === "く") {
+      var stem = f.slice(0, -1);
+      reg(stem + "く",    "");
+      reg(stem + "いた",  "is");
+      reg(stem + "いている","wa");
+      reg(stem + "いていた","wais");
+      reg(stem + "いて",  "");
+      reg(stem + "かない","");
+      reg(stem + "きます","");
+      reg(stem + "きました","is");
+      reg(stem + "った",  "is"); // 行く special
+      reg(stem + "っている","wa");
+      reg(stem + "っていた","wais");
+    }
+    // 話す→話し
+    if (f.slice(-1) === "す") {
+      var stem = f.slice(0, -1);
+      reg(stem + "す",     "");
+      reg(stem + "した",   "is");
+      reg(stem + "し",     "");
+      reg(stem + "している","wa");
+      reg(stem + "していた","wais");
+      reg(stem + "さない", "");
+      reg(stem + "します", "");
+      reg(stem + "しました","is");
+    }
+    // 思う→思っ
+    if (f.slice(-1) === "う") {
+      var stem = f.slice(0, -1);
+      reg(stem + "う",    "");
+      reg(stem + "った",  "is");
+      reg(stem + "っている","wa");
+      reg(stem + "っていた","wais");
+      reg(stem + "って",  "");
+      reg(stem + "わない","");
+      reg(stem + "います","");
+      reg(stem + "いました","is");
+    }
+    // 飛ぶ→飛ん
+    if (f.slice(-1) === "ぶ") {
+      var stem = f.slice(0, -1);
+      reg(stem + "ぶ",    "");
+      reg(stem + "んだ",  "is");
+      reg(stem + "んでいる","wa");
+      reg(stem + "んでいた","wais");
+      reg(stem + "ばない","");
+    }
+    // 読む→読ん
+    if (f.slice(-1) === "む") {
+      var stem = f.slice(0, -1);
+      reg(stem + "む",    "");
+      reg(stem + "んだ",  "is");
+      reg(stem + "んでいる","wa");
+      reg(stem + "んでいた","wais");
+      reg(stem + "まない","");
+      reg(stem + "みます","");
+      reg(stem + "みました","is");
+    }
+    // 死ぬ
+    if (f.slice(-1) === "ぬ") {
+      var stem = f.slice(0, -1);
+      reg(stem + "ぬ",   "");
+      reg(stem + "んだ", "is");
+      reg(stem + "んでいる","wa");
+      reg(stem + "んでいた","wais");
+    }
+    // 来る (special)
+    if (f === "来る") {
+      reg("来る",""); reg("来た","is"); reg("来て",""); reg("来ている","wa"); reg("来ていた","wais");
+      reg("きた","is"); reg("くる",""); reg("こない","");
+    }
+    // いる special
+    if (f === "いる") {
+      reg("いる",""); reg("いた","is"); reg("いて",""); reg("います",""); reg("いました","is");
+    }
+    // ある special
+    if (f === "ある") {
+      reg("ある",""); reg("あった","is"); reg("あります",""); reg("ありました","is"); reg("あり","");
+    }
+    // なる
+    if (f === "なる") {
+      reg("なる",""); reg("なった","is"); reg("なり",""); reg("なっている","wa"); reg("なっていた","wais");
+    }
+  });
+
+  return map;
+}
+
+var VERB_MAP = buildVerbMap(VERBS_BASE);
+
+/* =================================================================
+   BUILD SORTED KEY LISTS
+   ================================================================= */
+var VERB_SURF = Object.keys(VERB_MAP).sort(function(a,b){ return b.length - a.length; });
+
+/* 形容詞のちこ語base値のセット（レンダラーで形容詞判定に使う） */
+var ADJ_BASES = {};
+Object.keys(ADJ).forEach(function(k){ ADJ_BASES[ADJ[k]] = true; });
+var CONJ_PART_KEYS = Object.keys(CONJ_PART).sort(function(a,b){ return b.length - a.length; });
+var CASE_KEYS = Object.keys(CASE).sort(function(a,b){ return b.length - a.length; });
+
+/* 形容詞「く」形をADJに追加（通常の形容詞として格変化する） */
+ADJ["可愛く"]="tiam"; ADJ["美しく"]="reipar"; ADJ["早く"]="rap"; ADJ["悲しく"]="sar";
+ADJ["長く"]="ians";   ADJ["新しく"]="raip";   ADJ["醜く"]="verip"; ADJ["多く"]="cas";
+ADJ["広く"]="mupeir"; ADJ["大きく"]="mupeir"; ADJ["狭く"]="riepum"; ADJ["小さく"]="riepum";
+ADJ["丸く"]="muren";  ADJ["強く"]="ank";      ADJ["古く"]="ant";   ADJ["良く"]="marup";
+ADJ["悪く"]="veik";   ADJ["近く"]="waset";    ADJ["遠く"]="pioset";
+ADJ["高く"]="giban";  ADJ["赤く"]="sorm";
+/* ADJ追加後にALL_WORDS・WORD_KEYS・ADJ_BASESを確定 */
+var ALL_WORDS = Object.assign({}, NOUNS, ADJ, ADV, CONJ, PRON);
+/* はっきりと・時 を ALL_WORDS に追加（WORD_KEYS再構築前に） */
+ALL_WORDS["はっきりと"] = "kuja";
+ALL_WORDS["時"] = "ouk";
+ALL_WORDS["見える"] = "hunk";
+ALL_WORDS["見えた"] = "hunkis";
+var WORD_KEYS = Object.keys(ALL_WORDS).sort(function(a,b){ return b.length - a.length; });
+Object.keys(ADJ).forEach(function(k){ ADJ_BASES[ADJ[k]] = true; });
+
+/* 優先マッチリスト：CASEより前に確実に処理すべき複合語
+   （「は」「が」「に」などで始まり格助詞に食われやすいもの） */
+var PRIORITY_WORDS = {
+  "はっきりと":"kuja","はっきり":"kuja"
+};
+var PRIORITY_KEYS = Object.keys(PRIORITY_WORDS).sort(function(a,b){ return b.length - a.length; });
+
+/* =================================================================
+   TOKENIZER
+   ================================================================= */
+function tokenize(text) {
+  var tokens = [];
+  var i = 0;
+
+  while (i < text.length) {
+    /* 句読点 → 変換して出力 */
+    if (text[i] === '\u3002') { tokens.push({ kind:'punct', out:'.' }); i++; continue; }
+    if (text[i] === '\u3001') { tokens.push({ kind:'punct', out:',' }); i++; continue; }
+    /* その他スキップ文字 */
+    if (/[\s\u300c\u300d\uff01\uff1f\u2026\u30fb]/.test(text[i])) { i++; continue; }
+
+    var matched = false;
+
+    // 0. Priority words (must match before CASE consumes particles like は・と)
+    for (var pri = 0; pri < PRIORITY_KEYS.length && !matched; pri++) {
+      var prk = PRIORITY_KEYS[pri];
+      if (text.indexOf(prk, i) === i) {
+        tokens.push({ kind:'word', base: PRIORITY_WORDS[prk] });
+        i += prk.length;
+        matched = true;
+      }
+    }
+    if (matched) continue;
+
+    // 1. Try verb surface form (longest match)
+    for (var vi = 0; vi < VERB_SURF.length && !matched; vi++) {
+      var vk = VERB_SURF[vi];
+      if (text.indexOf(vk, i) === i) {
+        var vm = VERB_MAP[vk];
+        tokens.push({ kind:'verb', base:vm.base, tense:vm.tense });
+        i += vk.length;
+        matched = true;
+      }
+    }
+    if (matched) continue;
+
+    // 2. Try conjunctive particle (ので・から・けど etc.) — before CASE
+    for (var pi = 0; pi < CONJ_PART_KEYS.length && !matched; pi++) {
+      var pk = CONJ_PART_KEYS[pi];
+      if (text.indexOf(pk, i) === i) {
+        tokens.push({ kind:'word', base: CONJ_PART[pk] });
+        i += pk.length;
+        matched = true;
+      }
+    }
+    if (matched) continue;
+
+    // 3. Try case particle
+    for (var ci = 0; ci < CASE_KEYS.length && !matched; ci++) {
+      var ck = CASE_KEYS[ci];
+      if (text.indexOf(ck, i) === i) {
+        tokens.push({ kind:'case', suf: CASE[ck] });
+        i += ck.length;
+        matched = true;
+      }
+    }
+    if (matched) continue;
+
+    // 4. Try other known word
+    for (var wi = 0; wi < WORD_KEYS.length && !matched; wi++) {
+      var wk = WORD_KEYS[wi];
+      if (text.indexOf(wk, i) === i) {
+        tokens.push({ kind:'word', base: ALL_WORDS[wk] });
+        i += wk.length;
+        matched = true;
+      }
+    }
+    if (matched) continue;
+
+    // 5. Unknown chunk
+    var j = i + 1;
+    scan:
+    while (j < text.length) {
+      if (/[\s\u3002\u3001\u300c\u300d\uff01\uff1f\u2026\u30fb]/.test(text[j])) break;
+      for (var a=0;a<VERB_SURF.length;a++) { if (text.indexOf(VERB_SURF[a],j)===j){break scan;} }
+      for (var b=0;b<CONJ_PART_KEYS.length;b++) { if (text.indexOf(CONJ_PART_KEYS[b],j)===j){break scan;} }
+      for (var c=0;c<CASE_KEYS.length;c++) { if (text.indexOf(CASE_KEYS[c],j)===j){break scan;} }
+      for (var d=0;d<WORD_KEYS.length;d++) { if (text.indexOf(WORD_KEYS[d],j)===j){break scan;} }
+      j++;
+    }
+    tokens.push({ kind:'unknown', src: text.slice(i, j) });
+    i = j;
+  }
+  return tokens;
+}
+
+/* =================================================================
+   RENDERER
+   形容詞と名詞が連続するとき、末尾の格助詞を全員に付ける
+   例：美しい光を → reiparuus lumus  ではなく  reiparus lumus
+   ================================================================= */
+function isAdj(tok) {
+  return tok.kind === 'word' && ADJ_BASES[tok.base];
+}
+
+function renderTokens(tokens) {
+  var parts = [];
+  var i = 0;
+
+  while (i < tokens.length) {
+    var tok = tokens[i];
+
+    if (tok.kind === 'case') { i++; continue; }
+
+    if (tok.kind === 'punct') {
+      parts.push(tok.out);
+      i++; continue;
+    }
+
+    if (tok.kind === 'unknown') {
+      parts.push('<span class="unknown-token">' + esc(tok.src) + '(未翻訳)</span>');
+      i++; continue;
+    }
+
+    /* 引用格「と」→ 直前の単語に o を付加 */
+    if (tok.kind === 'word' && tok.base === '__QUOT__') {
+      if (parts.length > 0) parts[parts.length - 1] += 'o';
+      i++; continue;
+    }
+
+    /* ---- 形容詞＋名詞のグループ検出 ----
+       形容詞が1つ以上続いた後に名詞(or代名詞)が来て、
+       さらに格助詞が続く場合 → グループ全員に同じ格変化を付ける */
+    var groupStart = i;
+    var groupTokens = [];
+    var j = i;
+
+    /* 形容詞を集める */
+    while (j < tokens.length && tokens[j].kind === 'word' && isAdj(tokens[j])) {
+      groupTokens.push(tokens[j]);
+      j++;
+    }
+
+    /* 直後に名詞／代名詞／動詞（名詞的用法）があればグループに追加 */
+    if (groupTokens.length > 0 && j < tokens.length &&
+        tokens[j].kind === 'word' && !isAdj(tokens[j])) {
+      groupTokens.push(tokens[j]);
+      j++;
+    }
+
+    /* グループが2つ以上（形容詞+名詞）かつ直後に格助詞があるとき */
+    if (groupTokens.length >= 2 && j < tokens.length && tokens[j].kind === 'case') {
+      var caseSuf = tokens[j].suf;
+      groupTokens.forEach(function(gt) {
+        var form = gt.base;
+        if (gt.kind === 'verb' && gt.tense) form += gt.tense;
+        form += caseSuf;
+        parts.push(form);
+      });
+      i = j + 1; /* 格助詞まで消費 */
+      continue;
+    }
+
+    /* グループ検出できなかった → 通常処理 */
+    var form = tok.base;
+    if (tok.kind === 'verb' && tok.tense) form += tok.tense;
+
+    /* 直後の格助詞を消費 */
+    if (i + 1 < tokens.length && tokens[i+1].kind === 'case') {
+      form += tokens[i+1].suf;
+      i++;
+    }
+
+    parts.push(form);
+    i++;
+  }
+  return parts.join(' ');
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* =================================================================
+   MAIN
+   ================================================================= */
+function doTranslate() {
+  var raw = document.getElementById('input').value;
+  if (!raw.trim()) return;
+  var html = raw.split('\n').map(function(line) {
+    if (!line.trim()) return '';
+    return renderTokens(tokenize(line));
+  }).join('\n');
+  var el = document.getElementById('output');
+  el.innerHTML = html.trim()
+    ? html
+    : '<span class="placeholder">翻訳できる単語が見つかりませんでした</span>';
+}
+
+function clearAll() {
+  document.getElementById('input').value = '';
+  document.getElementById('output').innerHTML = '<span class="placeholder">翻訳結果がここに表示されます</span>';
+}
+
+function setEx(t) {
+  document.getElementById('input').value = t;
+  doTranslate();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) doTranslate();
+});
+</script>
+</body>
+</html>
