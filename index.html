@@ -643,6 +643,7 @@ footer { margin-top: 2.5rem; font-size: 11px; color: var(--muted); letter-spacin
           <tr><td>する</td><td class="chiko">yonk</td></tr>
           <tr><td>いる</td><td class="chiko">wonk</td></tr>
           <tr><td>ある</td><td class="chiko">deir</td></tr>
+          <tr><td>です・だ・である</td><td class="chiko">est</td></tr>
         </table>
       </div>
     </div>
@@ -777,7 +778,8 @@ var VERBS_BASE = {
   "変わる":"turip","集まる":"diopark","集う":"diopark","出る":"joud","見る":"hunk","なぞる":"hamik",
   "なる":"nar","する":"yonk","いる":"wonk","ある":"deir",
   "啼く":"dovel","鳴く":"dovel","飛ぶ":"rok","撒く":"mapuk","まく":"mapuk",
-  "終わる":"vionar"
+  "終わる":"vionar",
+  "です":"est","だ":"est","である":"est","でした":"estis","だった":"estis","でした":"estis"
 };
 
 var ADJ = {
@@ -1079,7 +1081,8 @@ Object.keys(ADJ).forEach(function(k){ ADJ_BASES[ADJ[k]] = true; });
 var PRIORITY_WORDS = {
   "はっきりと":"kuja","はっきり":"kuja",
   "あなた":"ein",
-  "とある":"irita"
+  "とある":"irita",
+  "でした":"estis","です":"est","である":"est","だった":"estis"
 };
 var PRIORITY_KEYS = Object.keys(PRIORITY_WORDS).sort(function(a,b){ return b.length - a.length; });
 
