@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ちこ語 翻訳機</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<title>ちこ語</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #f7f6f2;
+  --bg: #faf9f6;
   --surface: #ffffff;
-  --border: #e0ddd6;
-  --text: #1a1916;
-  --muted: #8a8680;
-  --accent: #4a3f8c;
-  --accent-light: #ebe9f7;
+  --border: #ccdacc;
+  --text: #1a211a;
+  --muted: #6b806b;
+  --accent: #1e5c2e;
+  --accent2: #2d7a40;
+  --accent-light: #f0f5f0;
   --unknown: #9b3060;
   --unknown-bg: #fdf0f5;
 }
@@ -23,221 +24,165 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Serif JP', serif;
-  font-weight: 300;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
   min-height: 100vh;
   padding: 3rem 1.5rem 4rem;
 }
 
-.page {
-  max-width: 760px;
-  margin: 0 auto;
-}
+.page { max-width: 820px; margin: 0 auto; }
 
 /* ---- header ---- */
-header {
-  margin-bottom: 2.5rem;
-}
-
+header { margin-bottom: 2rem; }
 .eyebrow {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
+  font-size: 10px; letter-spacing: 0.3em; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 0.5rem; font-weight: 700;
 }
-
 h1 {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1.6rem, 5vw, 2.4rem);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  margin-bottom: 0.4rem;
+  font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 900;
+  letter-spacing: 0.06em; color: var(--accent); margin-bottom: 0.3rem;
 }
+.subtitle { font-size: 13px; color: var(--muted); }
 
-.subtitle {
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 0.04em;
-}
+hr.rule { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 
-hr.rule {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 2rem 0;
+/* ---- tabs ---- */
+.tab-nav {
+  display: flex; gap: 0; margin-bottom: 2rem;
+  border-bottom: 2px solid var(--border);
 }
+.tab-btn {
+  font-size: 13px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif;
+  letter-spacing: 0.06em; padding: 10px 22px;
+  border: none; background: transparent; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: color 0.15s, border-color 0.15s;
+}
+.tab-btn:hover { color: var(--accent); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
 /* ---- translator card ---- */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
 }
-
 .card-header {
-  display: grid;
-  grid-template-columns: 1fr 32px 1fr;
-  align-items: center;
-  padding: 0.75rem 1.25rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  display: grid; grid-template-columns: 1fr 32px 1fr;
+  align-items: center; padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border); background: var(--bg);
 }
-
 .lang-label {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); font-weight: 700;
 }
-.lang-label.right {
-  text-align: right;
-  color: var(--accent);
-}
-
-.arrow {
-  text-align: center;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.panels {
-  display: grid;
-  grid-template-columns: 1fr 1px 1fr;
-}
-
+.lang-label.right { text-align: right; color: var(--accent); }
+.arrow { text-align: center; font-size: 14px; color: var(--muted); }
+.panels { display: grid; grid-template-columns: 1fr 1px 1fr; }
 .divider-v { background: var(--border); }
-
 .panel { padding: 1.25rem; }
-
 textarea {
-  width: 100%;
-  min-height: 150px;
-  background: transparent;
-  border: none;
-  outline: none;
-  resize: none;
-  font-family: 'Noto Serif JP', serif;
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--text);
-  line-height: 1.85;
-  caret-color: var(--accent);
+  width: 100%; min-height: 150px; background: transparent;
+  border: none; outline: none; resize: none;
+  font-family: 'Noto Sans JP', sans-serif; font-size: 15px; font-weight: 400;
+  color: var(--text); line-height: 1.85; caret-color: var(--accent);
 }
-textarea::placeholder { color: #c0bdb8; font-size: 13px; }
-
+textarea::placeholder { color: #aab8aa; font-size: 13px; }
 .output-text {
-  min-height: 150px;
-  font-size: 15px;
-  line-height: 1.85;
-  color: var(--text);
-  white-space: pre-wrap;
-  word-break: break-word;
+  min-height: 150px; font-size: 15px; line-height: 1.85;
+  color: var(--text); white-space: pre-wrap; word-break: break-word;
 }
-
-.placeholder { color: #c0bdb8; font-size: 13px; font-style: italic; }
-
+.placeholder { color: #aab8aa; font-size: 13px; font-style: italic; }
 .unknown-token {
-  color: var(--unknown);
-  background: var(--unknown-bg);
-  border-radius: 3px;
-  padding: 0 3px;
-  font-size: 0.87em;
+  color: var(--unknown); background: var(--unknown-bg);
+  border-radius: 3px; padding: 0 3px; font-size: 0.87em;
 }
-
 .card-footer {
-  padding: 0.75rem 1.25rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--bg);
+  padding: 0.75rem 1.25rem; border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; background: var(--bg);
 }
-
 .hint { font-size: 11px; color: var(--muted); }
-
 .btn-row { display: flex; gap: 8px; }
-
 button {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 13px;
-  border-radius: 6px;
-  cursor: pointer;
-  padding: 7px 18px;
+  font-family: 'Noto Sans JP', sans-serif; font-size: 13px; font-weight: 700;
+  border-radius: 6px; cursor: pointer; padding: 7px 18px;
   transition: background 0.15s, border-color 0.15s;
 }
-
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: 1px solid var(--accent);
-}
-.btn-primary:hover { background: #3a3070; }
-
-.btn-ghost {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-}
+.btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
 .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
 
-/* ---- grammar section ---- */
+/* ---- grammar grid (translate tab) ---- */
 .section-title {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 1rem;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1rem; font-weight: 700;
 }
-
-.grammar-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 6px;
-}
-
-.gc {
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 9px 12px;
-  background: var(--surface);
-}
+.grammar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
+.gc { border: 1px solid var(--border); border-radius: 7px; padding: 9px 12px; background: var(--surface); }
 .gc .lbl { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
-.gc .val { font-family: 'Cinzel', serif; font-size: 12px; color: var(--accent); letter-spacing: 0.05em; }
+.gc .val { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 0.05em; }
 
-/* ---- example chips ---- */
+/* ---- chips ---- */
 .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 0.75rem; }
-
 .chip {
-  font-size: 12px;
-  font-family: 'Noto Serif JP', serif;
-  font-weight: 300;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: 2em;
-  padding: 4px 13px;
-  cursor: pointer;
-  background: var(--surface);
+  font-size: 12px; font-family: 'Noto Sans JP', sans-serif; font-weight: 400;
+  color: var(--muted); border: 1px solid var(--border); border-radius: 2em;
+  padding: 4px 13px; cursor: pointer; background: var(--surface);
   transition: border-color 0.15s, color 0.15s;
 }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ---- footer ---- */
-footer {
-  margin-top: 2.5rem;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-}
+footer { margin-top: 2.5rem; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
 
-@media (max-width: 560px) {
+/* ---- grammar/word tabs shared ---- */
+.ref-section { margin-bottom: 2.5rem; }
+.ref-section h2 {
+  font-size: 15px; font-weight: 900; color: var(--accent);
+  margin-bottom: 0.6rem; padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent-light);
+}
+.ref-section .desc {
+  font-size: 13px; color: var(--text); line-height: 1.8;
+  background: var(--accent-light); border-left: 3px solid var(--accent2);
+  padding: 10px 14px; border-radius: 0 6px 6px 0; margin-bottom: 1rem;
+}
+.ref-section .desc strong { color: var(--accent); }
+.ref-section .sub-desc {
+  font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.7;
+}
+.ref-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ref-table th {
+  background: var(--accent); color: #fff; padding: 8px 12px;
+  text-align: left; font-weight: 700; font-size: 11px; letter-spacing: 0.06em;
+}
+.ref-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6; }
+.ref-table tr:nth-child(even) td { background: var(--accent-light); }
+.ref-table .chiko { color: var(--accent); font-weight: 700; }
+.ref-table .new-item td { background: #fff8e1 !important; }
+.ref-table .new-item .chiko { color: #7a5000; }
+.new-badge {
+  display: inline-block; font-size: 9px; background: #ffe082; color: #7a5000;
+  border-radius: 3px; padding: 1px 5px; margin-left: 4px; font-weight: 700; vertical-align: middle;
+}
+.ref-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.rule-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 16px; margin-bottom: 8px;
+}
+.rule-box .rule-title { font-size: 11px; font-weight: 700; color: var(--accent); margin-bottom: 6px; letter-spacing: 0.05em; }
+.rule-box .rule-body { font-size: 13px; color: var(--text); line-height: 1.75; }
+.rule-box .rule-body code {
+  background: var(--accent-light); color: var(--accent); font-weight: 700;
+  padding: 1px 5px; border-radius: 3px; font-family: monospace;
+}
+@media (max-width: 600px) {
   .panels { grid-template-columns: 1fr; }
   .divider-v { width: auto; height: 1px; }
   .card-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .ref-cols { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -246,9 +191,18 @@ footer {
 
   <header>
     <p class="eyebrow">Constructed Language · Chiko-go</p>
-    <h1>ちこ語 翻訳機</h1>
+    <h1>ちこ語</h1>
     <p class="subtitle">ちこによる自作言語 ― 日本語からちこ語へ</p>
   </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('translate', this)">翻訳機</button>
+    <button class="tab-btn" onclick="switchTab('grammar', this)">文法事項</button>
+    <button class="tab-btn" onclick="switchTab('words', this)">単語</button>
+  </nav>
+
+  <!-- ===== TAB: 翻訳機 ===== -->
+  <div id="tab-translate" class="tab-panel active">
 
   <div class="card">
     <div class="card-header">
@@ -318,6 +272,399 @@ footer {
     &ensp;·&ensp; 接辞順：① アスペクト ② 時制 ③ 名詞化 ④ 格変化
   </footer>
 
+  </div><!-- /tab-translate -->
+
+  <!-- ===== TAB: リファレンス ===== -->
+  <!-- ===== TAB: 文法事項 ===== -->
+  <div id="tab-grammar" class="tab-panel">
+
+    <div class="ref-section">
+      <h2>基本語順</h2>
+      <div class="desc">
+        ちこ語の語順は <strong>S（主語）→ O（目的語）→ V（動詞）</strong> です。日本語・韓国語・トルコ語と同じ語順で、動詞が文の最後に来ます。<br>
+        例：私は（S）猫を（O）食べる（V）→ <strong>chia abus feim</strong>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h2>膠着語としての構造</h2>
+      <div class="desc">
+        ちこ語は<strong>膠着語</strong>です。語幹の形は変わらず、後ろに接辞をくっつけていくことで意味や文法的役割を表します。<br>
+        接辞を付ける順番は決まっています：<strong>① アスペクト → ② 時制 → ③ 名詞化 → ④ 格変化</strong><br>
+        例：taom（着る）＋ is（過去）＋ ik（名詞化）＋ a（主格）→ <strong>taomisika</strong>（着たことは）
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h2>格変化</h2>
+      <div class="desc">
+        名詞・代名詞・形容詞は、文中での役割に応じて語尾が変化します（格変化）。<br>
+        重要なルール：<strong>形容詞は修飾する名詞と同じ格変化をとります。</strong><br>
+        例：美しい光を → <strong>reiparus lumus</strong>（reipar も lum も両方 +us）
+      </div>
+      <table class="ref-table">
+        <tr><th>格の名前</th><th>日本語の助詞</th><th>接辞</th><th>例</th></tr>
+        <tr><td>主格</td><td>〜は・〜が（主語）</td><td class="chiko">+ a</td><td>vair + a → <strong>vaira</strong>（神が）</td></tr>
+        <tr><td>対格</td><td>〜を（直接目的語）</td><td class="chiko">+ us</td><td>ab + us → <strong>abus</strong>（猫を）</td></tr>
+        <tr><td>属格</td><td>〜の（所属・所有）</td><td class="chiko">+ os</td><td>vair + os → <strong>vairos</strong>（神の）</td></tr>
+        <tr><td>与格</td><td>〜に（間接目的語）</td><td class="chiko">+ i</td><td>haij + i → <strong>haiji</strong>（村に）</td></tr>
+        <tr><td>造格</td><td>〜で・〜により（手段・道具）</td><td class="chiko">+ e</td><td>weip + e → <strong>weipe</strong>（水で）</td></tr>
+        <tr class="new-item"><td>引用格</td><td>〜と（思う・言う）</td><td class="chiko">+ o</td><td>muren + o → <strong>mureno</strong>（丸いと）<span class="new-badge">NEW</span></td></tr>
+        <tr><td>処格</td><td>〜において（は）</td><td class="chiko">+ iuris</td><td>Kyot + iuris → <strong>Kyotiuris</strong></td></tr>
+        <tr><td>奪格</td><td>〜から</td><td class="chiko">+ reak</td><td>haij + reak → <strong>haijreak</strong></td></tr>
+        <tr><td>到達格</td><td>〜まで</td><td class="chiko">+ amu</td><td>haij + amu → <strong>haijamu</strong></td></tr>
+        <tr><td>限定</td><td>〜のみ・だけ</td><td class="chiko">+ fet</td><td>un + fet → <strong>unfet</strong>（一つだけ）</td></tr>
+        <tr><td>添加</td><td>〜も・でも</td><td class="chiko">+ aju</td><td>chi + aju → <strong>chiaju</strong>（私も）</td></tr>
+      </table>
+    </div>
+
+    <div class="ref-section">
+      <h2>時制・アスペクト</h2>
+      <div class="desc">
+        <strong>時制</strong>は「いつの出来事か」を表します。<strong>アスペクト</strong>は「動作が進行中か・完了したか」を表します。<br>
+        アスペクトは時制より前に付きます（接辞順：①アスペクト → ②時制）。<br>
+        例：愛していた → viam + <strong>wa</strong>（進行）+ <strong>is</strong>（過去）→ <strong>viamwais</strong>
+      </div>
+      <table class="ref-table">
+        <tr><th>意味</th><th>接辞</th><th>例</th><th>備考</th></tr>
+        <tr><td>現在（基本形）</td><td class="chiko">—</td><td>viam（愛する）</td><td>何も付けない</td></tr>
+        <tr><td>過去形</td><td class="chiko">+ is</td><td>viamis（愛した）</td><td></td></tr>
+        <tr><td>未来形</td><td class="chiko">+ y</td><td>viamy（愛するだろう）</td><td></td></tr>
+        <tr><td>進行・反復</td><td class="chiko">+ wa</td><td>viamwa（愛している）</td><td>アスペクト</td></tr>
+        <tr><td>進行＋過去</td><td class="chiko">+ wais</td><td>viamwais（愛していた）</td><td>wa + is の合成</td></tr>
+        <tr><td>完了</td><td class="chiko">+ ja</td><td>viamja（愛し終えた）</td><td>アスペクト</td></tr>
+        <tr><td>完了＋過去</td><td class="chiko">+ jais</td><td>viamjais（愛し終えていた）</td><td>ja + is の合成</td></tr>
+      </table>
+    </div>
+
+    <div class="ref-section">
+      <h2>動詞の派生接辞</h2>
+      <div class="desc">
+        動詞の語幹にハイフン付きの接辞をくっつけることで、可能・受け身・意志の意味を表せます。
+      </div>
+      <table class="ref-table">
+        <tr><th>意味</th><th>接辞</th><th>例</th><th>日本語</th></tr>
+        <tr class="new-item"><td>可能（〜できる）</td><td class="chiko">-kav</td><td>feim-kav</td><td>食べられる（できる）<span class="new-badge">NEW</span></td></tr>
+        <tr class="new-item"><td>受け身（〜される）</td><td class="chiko">-pas</td><td>feim-pas</td><td>食べられる（される）<span class="new-badge">NEW</span></td></tr>
+        <tr class="new-item"><td>意志・勧誘（〜しよう）</td><td class="chiko">-vol</td><td>feim-vol</td><td>食べよう<span class="new-badge">NEW</span></td></tr>
+      </table>
+      <p class="sub-desc" style="margin-top:8px;">※ 可能（-kav）と受け身（-pas）は日本語では「〜られる」が共通するため混同しやすいですが、ちこ語では接辞で明確に区別します。</p>
+    </div>
+
+    <div class="ref-section">
+      <h2>名詞化・複数形・その他接辞</h2>
+      <div class="desc">
+        動詞や形容詞を名詞として使いたいとき、語幹に <strong>ik</strong> を付けます。複数形は <strong>er</strong> です。
+      </div>
+      <table class="ref-table">
+        <tr><th>意味</th><th>接辞</th><th>例</th></tr>
+        <tr><td>名詞化（〜すること）</td><td class="chiko">ik</td><td>viamik（愛すること）</td></tr>
+        <tr><td>名詞化（〜もの）</td><td class="chiko">ip</td><td>特殊な名詞化</td></tr>
+        <tr><td>複数形</td><td class="chiko">er</td><td>homer（人々）</td></tr>
+        <tr><td>否定（〜ない）</td><td class="chiko">exi-</td><td>exi-wonk（いない）</td></tr>
+        <tr><td>強調</td><td class="chiko">bon-</td><td>bon-viam（強く愛する）</td></tr>
+        <tr><td>〜的な</td><td class="chiko">-jo'r</td><td>vairjo'r（神的な）</td></tr>
+        <tr><td>〜とき（形式名詞）</td><td class="chiko">ouk</td><td>piakouk（日のとき）</td></tr>
+        <tr><td>〜したい</td><td class="chiko">arak</td><td>diakarak（取りたい）</td></tr>
+        <tr><td>〜以外・他</td><td class="chiko">egud</td><td>kusegud（男以外）</td></tr>
+      </table>
+    </div>
+
+    <div class="ref-section">
+      <h2>接続詞・接続助詞・句読点</h2>
+      <div class="desc">
+        接続詞は独立した単語として使います。<strong>eutro</strong>（〜ながら）は同時進行を表す接続助詞で、前後の動詞はどちらも基本形のままです。
+      </div>
+      <table class="ref-table">
+        <tr><th>日本語</th><th>ちこ語</th><th>使い方</th></tr>
+        <tr><td>だから・ので・から（理由）</td><td class="chiko">rei</td><td>文と文の間に置く</td></tr>
+        <tr><td>しかし・でも・けど（逆接）</td><td class="chiko">nweri</td><td>文と文の間に置く</td></tr>
+        <tr class="new-item"><td>〜ながら（同時進行）</td><td class="chiko">eutro</td><td>動詞（基本形）+ eutro + 動詞（基本形）<span class="new-badge">NEW</span></td></tr>
+        <tr><td>すると</td><td class="chiko">teip</td><td>文頭に置く</td></tr>
+        <tr><td>そして・また（加えて）</td><td class="chiko">peno</td><td>文と文の間に置く</td></tr>
+        <tr><td>なぜならば</td><td class="chiko">purinsu</td><td>文頭に置く</td></tr>
+        <tr><td>、（読点）</td><td class="chiko">,</td><td></td></tr>
+        <tr><td>。（句点）</td><td class="chiko">.</td><td></td></tr>
+      </table>
+    </div>
+
+    <div class="ref-section">
+      <h2>単語作成のルール</h2>
+      <div class="ref-cols">
+        <div class="rule-box">
+          <div class="rule-title">語尾のルール</div>
+          <div class="rule-body">
+            名詞・形容詞・動詞の語尾は<code>子音</code>で終わらせる。<br>
+            母音で始まる接辞（格変化など）をくっつけるためです。<br>
+            副詞・接続詞は基本<code>母音</code>で終わらせる。
+          </div>
+        </div>
+        <div class="rule-box">
+          <div class="rule-title">表記のルール</div>
+          <div class="rule-body">
+            くっつけて使う接辞は前に<code>-</code>をつけて表記。<br>
+            伸ばす音は<code>'</code>で表記（例：<code>fori'n</code>、<code>que'r</code>）。<br>
+            アルファベットの組み合わせは既存の言語を参考にしない。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer style="margin-top:2rem;">
+      ちこ語（Chiko-go）&ensp;·&ensp;ちこ 自作言語プロジェクト
+    </footer>
+
+  </div><!-- /tab-grammar -->
+
+  <!-- ===== TAB: 単語 ===== -->
+  <div id="tab-words" class="tab-panel">
+
+    <div class="ref-section">
+      <h2>名詞</h2>
+      <div class="ref-cols">
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>人類・人間・人</td><td class="chiko">hom</td></tr>
+          <tr><td>猫</td><td class="chiko">ab</td></tr>
+          <tr><td>星</td><td class="chiko">twink</td></tr>
+          <tr><td>宇宙</td><td class="chiko">areiz</td></tr>
+          <tr><td>服</td><td class="chiko">fat</td></tr>
+          <tr><td>国</td><td class="chiko">nait</td></tr>
+          <tr><td>親・原因</td><td class="chiko">him</td></tr>
+          <tr><td>子供・結果</td><td class="chiko">hum</td></tr>
+          <tr><td>風・姿の見えないもの</td><td class="chiko">var</td></tr>
+          <tr><td>光・目標</td><td class="chiko">lum</td></tr>
+          <tr><td>水・何にでもなれるもの</td><td class="chiko">weip</td></tr>
+          <tr><td>火・広がるもの</td><td class="chiko">kaifar</td></tr>
+          <tr><td>道・道標</td><td class="chiko">pat</td></tr>
+          <tr><td>神</td><td class="chiko">vair</td></tr>
+          <tr><td>世界</td><td class="chiko">ofi'ruk</td></tr>
+          <tr><td>門</td><td class="chiko">warp</td></tr>
+          <tr><td>下</td><td class="chiko">sat</td></tr>
+          <tr class="new-item"><td>上</td><td class="chiko">get <span class="new-badge">NEW</span></td></tr>
+          <tr><td>召使い・下人</td><td class="chiko">verap</td></tr>
+          <tr><td>雨</td><td class="chiko">par</td></tr>
+          <tr><td>男</td><td class="chiko">kus</td></tr>
+          <tr><td>女</td><td class="chiko">ket</td></tr>
+          <tr><td>柱</td><td class="chiko">fokl</td></tr>
+          <tr><td>地震</td><td class="chiko">ronk</td></tr>
+          <tr><td>火事</td><td class="chiko">kaig</td></tr>
+          <tr><td>飢饉・飢餓</td><td class="chiko">vour</td></tr>
+          <tr><td>災害・災い</td><td class="chiko">zient</td></tr>
+          <tr><td>年・年度</td><td class="chiko">jeis</td></tr>
+          <tr><td>幸せ・幸福</td><td class="chiko">feris</td></tr>
+          <tr><td>家族・家</td><td class="chiko">nous</td></tr>
+          <tr><td>様子・有様</td><td class="chiko">nidep</td></tr>
+          <tr><td>記録・文書</td><td class="chiko">sudor</td></tr>
+          <tr><td>太陽・日</td><td class="chiko">piak</td></tr>
+          <tr><td>鴉・カラス</td><td class="chiko">bef</td></tr>
+          <tr><td>丸・円</td><td class="chiko">muras</td></tr>
+          <tr><td>よう（状態の移行）</td><td class="chiko">ravet</td></tr>
+          <tr><td>ありがたい</td><td class="chiko">guronk</td></tr>
+          <tr><td>◯の人・住人</td><td class="chiko">ha'm</td></tr>
+          <tr><td>間違いを犯した・馬鹿</td><td class="chiko">meisut</td></tr>
+          <tr><td>無事</td><td class="chiko">aient</td></tr>
+          <tr><td>箔・すだれ</td><td class="chiko">rivar</td></tr>
+          <tr><td>沢山・多くの</td><td class="chiko">lupof</td></tr>
+          <tr class="new-item"><td>鴟尾</td><td class="chiko">shibi <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>まわり・周囲</td><td class="chiko">hupib <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>空</td><td class="chiko">venuy <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>夕焼け</td><td class="chiko">wauf <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>胡麻</td><td class="chiko">tibok <span class="new-badge">NEW</span></td></tr>
+        </table>
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>王・王様</td><td class="chiko">emp</td></tr>
+          <tr><td>旅・穏やかな冒険</td><td class="chiko">wer</td></tr>
+          <tr><td>町・村</td><td class="chiko">haij</td></tr>
+          <tr><td>湖</td><td class="chiko">laq</td></tr>
+          <tr><td>人生・生涯</td><td class="chiko">que'r</td></tr>
+          <tr><td>暴力</td><td class="chiko">vorent</td></tr>
+          <tr><td>成長</td><td class="chiko">iyan</td></tr>
+          <tr><td>自然・緑</td><td class="chiko">zam</td></tr>
+          <tr><td>調和・平和</td><td class="chiko">fuup</td></tr>
+          <tr><td>友人・変えがたいもの</td><td class="chiko">sukom</td></tr>
+          <tr><td>名前</td><td class="chiko">mein</td></tr>
+          <tr><td>研究</td><td class="chiko">poik</td></tr>
+          <tr><td>発表</td><td class="chiko">ponk</td></tr>
+          <tr><td>山</td><td class="chiko">rout</td></tr>
+          <tr><td>丹</td><td class="chiko">wab</td></tr>
+          <tr><td>金</td><td class="chiko">gol</td></tr>
+          <tr><td>銀</td><td class="chiko">bol</td></tr>
+          <tr><td>木・樹木</td><td class="chiko">bin</td></tr>
+          <tr><td>端</td><td class="chiko">gig</td></tr>
+          <tr><td>薪</td><td class="chiko">teor</td></tr>
+          <tr><td>お金・料金</td><td class="chiko">kinot</td></tr>
+          <tr><td>修理</td><td class="chiko">fikus</td></tr>
+          <tr><td>習慣・決まり</td><td class="chiko">debort</td></tr>
+          <tr><td>丹塗り</td><td class="chiko">weab</td></tr>
+          <tr><td>恥</td><td class="chiko">fori'n</td></tr>
+          <tr><td>もの</td><td class="chiko">youn</td></tr>
+          <tr><td>一・1</td><td class="chiko">un</td></tr>
+          <tr><td>二・2</td><td class="chiko">an</td></tr>
+          <tr><td>三・3</td><td class="chiko">in</td></tr>
+          <tr><td>四・4</td><td class="chiko">en</td></tr>
+          <tr><td>五・5</td><td class="chiko">kun</td></tr>
+          <tr><td>六・6</td><td class="chiko">san</td></tr>
+          <tr><td>七・7</td><td class="chiko">pun</td></tr>
+          <tr><td>八・8</td><td class="chiko">men</td></tr>
+          <tr><td>九・9</td><td class="chiko">fon</td></tr>
+          <tr><td>零・0</td><td class="chiko">ru'n</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h2>動詞</h2>
+      <div class="ref-cols">
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>食べる</td><td class="chiko">feim</td></tr>
+          <tr><td>生きる</td><td class="chiko">reitiv</td></tr>
+          <tr><td>寝る</td><td class="chiko">perin</td></tr>
+          <tr><td>着る</td><td class="chiko">taom</td></tr>
+          <tr><td>死ぬ・消える</td><td class="chiko">ziw</td></tr>
+          <tr><td>愛する</td><td class="chiko">viam</td></tr>
+          <tr><td>揺れる</td><td class="chiko">bowing</td></tr>
+          <tr><td>行く・向かう</td><td class="chiko">teik</td></tr>
+          <tr><td>帰る</td><td class="chiko">saren</td></tr>
+          <tr><td>喋る・話す</td><td class="chiko">teof</td></tr>
+          <tr><td>過ごす</td><td class="chiko">weist</td></tr>
+          <tr><td>怒る</td><td class="chiko">heri't</td></tr>
+          <tr><td>決める</td><td class="chiko">raid</td></tr>
+          <tr><td>与える</td><td class="chiko">pour</td></tr>
+          <tr><td>止まる</td><td class="chiko">ster</td></tr>
+          <tr><td>続く</td><td class="chiko">rest</td></tr>
+          <tr><td>待つ</td><td class="chiko">kouj</td></tr>
+          <tr><td>衰える</td><td class="chiko">bat</td></tr>
+          <tr><td>壊す・砕く</td><td class="chiko">poreit</td></tr>
+          <tr><td>付く</td><td class="chiko">potted</td></tr>
+          <tr class="new-item"><td>啼く・鳴く</td><td class="chiko">dovel <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>飛ぶ</td><td class="chiko">rok <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>撒く</td><td class="chiko">mapuk <span class="new-badge">NEW</span></td></tr>
+        </table>
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>重ねる</td><td class="chiko">yebuf</td></tr>
+          <tr><td>売る</td><td class="chiko">bair</td></tr>
+          <tr><td>気にする</td><td class="chiko">fam</td></tr>
+          <tr><td>騙す</td><td class="chiko">vurat</td></tr>
+          <tr><td>盗む</td><td class="chiko">fobug</td></tr>
+          <tr><td>取る・持つ</td><td class="chiko">diak</td></tr>
+          <tr><td>来る</td><td class="chiko">fut</td></tr>
+          <tr><td>棄てる・捨てる</td><td class="chiko">aiw</td></tr>
+          <tr><td>思う</td><td class="chiko">sindr</td></tr>
+          <tr><td>考える</td><td class="chiko">kunib</td></tr>
+          <tr><td>変わる</td><td class="chiko">turip</td></tr>
+          <tr><td>集まる</td><td class="chiko">diopark</td></tr>
+          <tr><td>出る</td><td class="chiko">joud</td></tr>
+          <tr><td>見る・見える</td><td class="chiko">hunk</td></tr>
+          <tr><td>なぞる</td><td class="chiko">hamik</td></tr>
+          <tr><td>なる・起こった</td><td class="chiko">nar</td></tr>
+          <tr><td>終わる</td><td class="chiko">vionar</td></tr>
+          <tr><td>する</td><td class="chiko">yonk</td></tr>
+          <tr><td>いる</td><td class="chiko">wonk</td></tr>
+          <tr><td>ある</td><td class="chiko">deir</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h2>形容詞</h2>
+      <p class="sub-desc">「〜く」形も同じ語幹で扱います。例：丸く → muren として格変化させる</p>
+      <div class="ref-cols">
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>可愛い</td><td class="chiko">tiam</td></tr>
+          <tr><td>美しい</td><td class="chiko">reipar</td></tr>
+          <tr><td>早い</td><td class="chiko">rap</td></tr>
+          <tr><td>悲しい</td><td class="chiko">sar</td></tr>
+          <tr><td>長い</td><td class="chiko">ians</td></tr>
+          <tr><td>新しい</td><td class="chiko">raip</td></tr>
+          <tr><td>醜い</td><td class="chiko">verip</td></tr>
+          <tr><td>多い</td><td class="chiko">cas</td></tr>
+          <tr><td>広い・大きい</td><td class="chiko">mupeir</td></tr>
+          <tr class="new-item"><td>高い</td><td class="chiko">giban <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>赤い</td><td class="chiko">sorm <span class="new-badge">NEW</span></td></tr>
+        </table>
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>狭い・小さい</td><td class="chiko">riepum</td></tr>
+          <tr><td>丸い</td><td class="chiko">muren</td></tr>
+          <tr><td>強い</td><td class="chiko">ank</td></tr>
+          <tr><td>古い</td><td class="chiko">ant</td></tr>
+          <tr><td>良い</td><td class="chiko">marup</td></tr>
+          <tr><td>悪い</td><td class="chiko">veik</td></tr>
+          <tr><td>近い</td><td class="chiko">waset</td></tr>
+          <tr><td>遠い</td><td class="chiko">pioset</td></tr>
+          <tr><td>駄目だ（形容動詞）</td><td class="chiko">go</td></tr>
+          <tr><td>嫌だ（形容動詞）</td><td class="chiko">benko</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h2>副詞・代名詞・感動詞</h2>
+      <div class="ref-cols">
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>とても・強調して</td><td class="chiko">ati</td></tr>
+          <tr><td>もう〜</td><td class="chiko">yungu</td></tr>
+          <tr><td>すでに</td><td class="chiko">eluto</td></tr>
+          <tr><td>少し</td><td class="chiko">sungu</td></tr>
+          <tr><td>なぜ・何故</td><td class="chiko">perin</td></tr>
+          <tr><td>なぜならば</td><td class="chiko">purinsu</td></tr>
+          <tr><td>あと</td><td class="chiko">uti</td></tr>
+          <tr><td>〜など</td><td class="chiko">bunt</td></tr>
+          <tr><td>元々</td><td class="chiko">donb</td></tr>
+          <tr><td>また（もう一度）</td><td class="chiko">nen</td></tr>
+          <tr><td>いくつか</td><td class="chiko">roj</td></tr>
+          <tr><td>全て・誰でも</td><td class="chiko">aip</td></tr>
+          <tr class="new-item"><td>特に・ことに</td><td class="chiko">anke <span class="new-badge">NEW</span></td></tr>
+          <tr class="new-item"><td>はっきり</td><td class="chiko">kuja <span class="new-badge">NEW</span></td></tr>
+          <tr><td>必ず・絶対</td><td class="chiko">guik</td></tr>
+        </table>
+        <table class="ref-table">
+          <tr><th>日本語</th><th>ちこ語</th></tr>
+          <tr><td>私</td><td class="chiko">chi</td></tr>
+          <tr><td>彼女</td><td class="chiko">ket</td></tr>
+          <tr><td>彼</td><td class="chiko">vent</td></tr>
+          <tr><td>君（カジュアルな二人称）</td><td class="chiko">ain</td></tr>
+          <tr class="new-item"><td>あなた（フォーマルな二人称）</td><td class="chiko">ein <span class="new-badge">NEW</span></td></tr>
+          <tr><td>俺（カジュアルな一人称）</td><td class="chiko">eret</td></tr>
+          <tr><td>どこ</td><td class="chiko">geak</td></tr>
+          <tr><td>この</td><td class="chiko">ro</td></tr>
+          <tr><td>その</td><td class="chiko">po</td></tr>
+          <tr><td>あの</td><td class="chiko">ho</td></tr>
+          <tr><td>どの</td><td class="chiko">zo</td></tr>
+          <tr><td>とある・どこにでもある</td><td class="chiko">irita</td></tr>
+          <tr><td>〜や（並列）</td><td class="chiko">fei</td></tr>
+          <tr><td>こんにちは</td><td class="chiko">nyai</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h2>羅生門 翻訳記録</h2>
+      <table class="ref-table">
+        <tr><th>原文</th><th>ちこ語訳</th></tr>
+        <tr>
+          <td style="font-size:12px;">昼間見ると、その鴉が何羽となく輪を描いて、高い鴟尾のまわりを啼きながら、飛びまわっている。</td>
+          <td class="chiko" style="font-size:12px;">Piaka joudwa-ouki hunkfo, po rojos befa murasus hamik-e, gibanos shibios hupibus dovel eutro rokwa.</td>
+        </tr>
+        <tr>
+          <td style="font-size:12px;">ことに、門の上の空が、夕焼けで赤くなる時に、その空が胡麻を撒いたようにはっきりと見えた。</td>
+          <td class="chiko" style="font-size:12px;">Anke, warpos getos venuya, waufe sorm nar ouki, po venuya tibokus mapukis raveti kuja fo hunkis.</td>
+        </tr>
+      </table>
+    </div>
+
+    <footer style="margin-top:2rem;">
+      ちこ語（Chiko-go）&ensp;·&ensp;ちこ 自作言語プロジェクト
+    </footer>
+
+  </div><!-- /tab-words -->
+
 </div>
 <script>
 /* =================================================================
@@ -337,7 +684,9 @@ var NOUNS = {
   "お金":"kinot","修理":"fikus","習慣":"debort","太陽":"piak","日":"piak","鴉":"bef","カラス":"bef",
   "丸":"muras","円":"muras","丹塗り":"weab","歴史":"que'r","家":"nous","幸福":"feris","恥":"fori'n","もの":"youn",
   "よう":"ravet",
-  "鴟尾":"shibi","まわり":"hupib","周囲":"hupib","上":"get","空":"venuy","夕焼け":"wauf","胡麻":"tibok"
+  "鴟尾":"shibi","まわり":"hupib","周囲":"hupib","上":"get","空":"venuy","夕焼け":"wauf","胡麻":"tibok",
+  "ありがたい":"guronk","住人":"ha'm","間違いを犯した":"meisut","馬鹿":"meisut","無事":"aient",
+  "箔":"rivar","すだれ":"rivar","沢山":"lupof","多くの":"lupof"
 };
 
 var VERBS_BASE = {
@@ -349,29 +698,32 @@ var VERBS_BASE = {
   "持つ":"diak","来る":"fut","棄てる":"aiw","捨てる":"aiw","思う":"sindr","考える":"kunib",
   "変わる":"turip","集まる":"diopark","集う":"diopark","出る":"joud","見る":"hunk","なぞる":"hamik",
   "なる":"nar","する":"yonk","いる":"wonk","ある":"deir",
-  "啼く":"dovel","鳴く":"dovel","飛ぶ":"rok","撒く":"mapuk","まく":"mapuk"
+  "啼く":"dovel","鳴く":"dovel","飛ぶ":"rok","撒く":"mapuk","まく":"mapuk",
+  "終わる":"vionar"
 };
 
 var ADJ = {
   "可愛い":"tiam","美しい":"reipar","早い":"rap","悲しい":"sar","長い":"ians","新しい":"raip",
   "醜い":"verip","多い":"cas","広い":"mupeir","大きい":"mupeir","狭い":"riepum","小さい":"riepum",
   "丸い":"muren","強い":"ank","古い":"ant","良い":"marup","悪い":"veik","近い":"waset","遠い":"pioset",
-  "高い":"giban","赤い":"sorm"
+  "高い":"giban","赤い":"sorm","新たな":"aiz"
 };
 
 var ADV = {
   "とても":"ati","早く":"ripu","もう":"yungu","すでに":"eluto","少し":"sungu","なぜ":"perin",
   "なぜならば":"purinsu","あと":"uti","など":"bunt","元々":"donb","また":"nen","いくつか":"roj",
   "何故":"perin","全て":"aip","全員":"aip","誰でも":"aip",
-  "特に":"anke","ことに":"anke","はっきり":"kuja"
+  "特に":"anke","ことに":"anke","はっきり":"kuja",
+  "必ず":"guik","絶対":"guik"
 };
 
-var CONJ  = {"だから":"rei","しかし":"nweri","でも":"nweri","すると":"teip","そして":"peno"};
-var PRON  = {"私":"chi","彼女":"ket","彼":"vent","君":"ain","俺":"eret","この":"ro","その":"po","あの":"ho","どの":"zo"};
+var CONJ  = {"だから":"rei","しかし":"nweri","でも":"nweri","すると":"teip","そして":"peno","〜や":"fei","や":"fei"};
+var PRON  = {"私":"chi","彼女":"ket","彼":"vent","君":"ain","俺":"eret","あなた":"ein","この":"ro","その":"po","あの":"ho","どの":"zo","とある":"irita","ある":"irita"};
 
 /* 接続助詞：CASEより前にマッチ。独立トークンとして出力 */
 var CONJ_PART = {
   "けれども":"nweri","けれど":"nweri","のに":"nweri","ながら":"eutro","ても":"nweri","けど":"nweri",
+  "ては":"epa","では":"epa",
   "ので":"rei","から":"rei",
   "と":"__QUOT__"  /* 引用格：直前の語に o を付ける */
 };
@@ -543,6 +895,77 @@ function buildVerbMap(baseDict) {
 
 var VERB_MAP = buildVerbMap(VERBS_BASE);
 
+/* -kav（可能：〜できる）・-vol（意志：〜しよう）の活用形を追加 */
+Object.keys(VERBS_BASE).forEach(function(dictForm) {
+  var base = VERBS_BASE[dictForm];
+  var f = dictForm;
+
+  function regKav(surface, tense) {
+    if (!VERB_MAP[surface]) VERB_MAP[surface] = { base: base + "-kav", tense: tense };
+  }
+  function regVol(surface, tense) {
+    if (!VERB_MAP[surface]) VERB_MAP[surface] = { base: base + "-vol", tense: tense };
+  }
+  function regPas(surface, tense) {
+    if (!VERB_MAP[surface]) VERB_MAP[surface] = { base: base + "-pas", tense: tense };
+  }
+
+  // 一段動詞（〜る）
+  if (f.slice(-1) === "る") {
+    var stem = f.slice(0, -1);
+    regKav(stem + "られる", ""); regKav(stem + "られた", "is"); regKav(stem + "られない", "");
+    regPas(stem + "られる", ""); regPas(stem + "られた", "is"); regPas(stem + "られない", "");
+    regVol(stem + "よう", ""); regVol(stem + "ましょう", "");
+  }
+  // する動詞
+  if (f.slice(-2) === "する") {
+    var s = f.slice(0, -2);
+    regKav(s + "できる", ""); regKav(s + "できた", "is"); regKav(s + "できない", "");
+    regPas(s + "される", ""); regPas(s + "された", "is"); regPas(s + "されない", "");
+    regVol(s + "しよう", ""); regVol(s + "しましょう", "");
+  }
+  // 五段：つ
+  if (f.slice(-1) === "つ") {
+    var stem = f.slice(0, -1);
+    regKav(stem + "てる", ""); regKav(stem + "てた", "is");
+    regPas(stem + "たれる", ""); regPas(stem + "たれた", "is");
+    regVol(stem + "とう", "");
+  }
+  // 五段：く
+  if (f.slice(-1) === "く") {
+    var stem = f.slice(0, -1);
+    regKav(stem + "ける", ""); regKav(stem + "けた", "is");
+    regPas(stem + "かれる", ""); regPas(stem + "かれた", "is");
+    regVol(stem + "こう", "");
+  }
+  // 五段：す
+  if (f.slice(-1) === "す") {
+    var stem = f.slice(0, -1);
+    regKav(stem + "せる", ""); regKav(stem + "せた", "is");
+    regPas(stem + "される", ""); regPas(stem + "された", "is");
+    regVol(stem + "そう", "");
+  }
+  // 五段：う
+  if (f.slice(-1) === "う") {
+    var stem = f.slice(0, -1);
+    regKav(stem + "える", ""); regKav(stem + "えた", "is");
+    regPas(stem + "われる", ""); regPas(stem + "われた", "is");
+    regVol(stem + "おう", "");
+  }
+  // 五段：む
+  if (f.slice(-1) === "む") {
+    var stem = f.slice(0, -1);
+    regKav(stem + "める", ""); regKav(stem + "めた", "is");
+    regPas(stem + "まれる", ""); regPas(stem + "まれた", "is");
+    regVol(stem + "もう", "");
+  }
+  // 食べよう など（一段のよう形を念のため補完）
+  if (f.slice(-1) === "る") {
+    var stem = f.slice(0, -1);
+    regVol(stem + "よう", "");
+  }
+});
+
 /* =================================================================
    BUILD SORTED KEY LISTS
    ================================================================= */
@@ -568,13 +991,17 @@ ALL_WORDS["はっきりと"] = "kuja";
 ALL_WORDS["時"] = "ouk";
 ALL_WORDS["見える"] = "hunk";
 ALL_WORDS["見えた"] = "hunkis";
+ALL_WORDS["こんにちは"] = "nyai";
+ALL_WORDS["こんにちわ"] = "nyai";
 var WORD_KEYS = Object.keys(ALL_WORDS).sort(function(a,b){ return b.length - a.length; });
 Object.keys(ADJ).forEach(function(k){ ADJ_BASES[ADJ[k]] = true; });
 
 /* 優先マッチリスト：CASEより前に確実に処理すべき複合語
    （「は」「が」「に」などで始まり格助詞に食われやすいもの） */
 var PRIORITY_WORDS = {
-  "はっきりと":"kuja","はっきり":"kuja"
+  "はっきりと":"kuja","はっきり":"kuja",
+  "あなた":"ein",
+  "とある":"irita"
 };
 var PRIORITY_KEYS = Object.keys(PRIORITY_WORDS).sort(function(a,b){ return b.length - a.length; });
 
@@ -783,6 +1210,13 @@ function setEx(t) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) doTranslate();
 });
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
 </script>
 </body>
 </html>
