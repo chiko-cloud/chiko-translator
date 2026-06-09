@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ちこ語</title>
+<title>ちこ語 | 自作人工言語 Chiko-go</title>
+<meta name="description" content="ちこ語（Chiko-go）は膠着語型のSOV語順を持つ自作人工言語です。文法解説・単語一覧・日本語からちこ語への翻訳機・羅生門翻訳が使えます。">
+<meta name="keywords" content="ちこ語, Chiko-go, 自作言語, 人工言語, 翻訳機, 膠着語, 構築言語, 芸術言語, conlang">
+<!-- ↓ Search ConsoleでコピーしたHTMLタグをここに貼り付ける -->
+<meta name="google-site-verification" content="<meta name="google-site-verification" content="g8eutI9tqcaGe0drYI4RVA0-8sD_aMJY-5VV2J1wY8A" />">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,7 +44,6 @@ body {
   overflow: hidden;
 }
 
-/* 背景の装飾ライン */
 .hero::before {
   content: '';
   position: absolute;
@@ -209,7 +212,6 @@ body {
 }
 .card:hover .card-arrow { transform: translateX(4px); }
 
-/* ヒーローカード（翻訳機）は大きく */
 .card.featured {
   grid-column: 1 / -1;
   flex-direction: row;
@@ -302,7 +304,6 @@ footer {
   to   { width: 40px; }
 }
 
-/* カードをスクロールで出現 */
 .card {
   opacity: 0;
   transform: translateY(20px);
@@ -416,7 +417,6 @@ footer {
 </footer>
 
 <script>
-/* スクロールで要素を出現させる */
 var observer = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
     if (e.isIntersecting) {
