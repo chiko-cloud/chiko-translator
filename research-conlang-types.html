@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>人工言語の研究 | 研究 | ちこ語 Chiko-go</title>
-<meta name="description" content="言語の形態的分類、人工言語の4つの種類、エスペラント語とちこ語の比較、なぜ言語を創るのかをまとめた研究。">
+<title>自作言語で読む「羅生門」 | 研究 | ちこ語 Chiko-go</title>
+<meta name="description" content="言語の形態的分類、ちこ語の特徴、人工言語の4分類、エスペラント語との比較、なぜ言語を創るのか、羅生門の翻訳と翻訳機作成までをまとめた研究。">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -13,12 +13,17 @@
 
 <main class="article">
   <p class="eyebrow">Research 02-2</p>
-  <h1>人工言語の研究</h1>
-  <p class="lead">言語にはどんな種類があり、人工言語はなぜ・どう作られるのか。エスペラント語と比べながら、ちこ語の位置づけを考えました。</p>
+  <h1>自作言語で読む「羅生門」<br>言語創造を通した文学表現</h1>
+  <p class="lead">昨年度から続けている言語作成を軸に、なぜ言語を創るのか、羅生門の翻訳、翻訳機の作成までを話した研究です。人工言語の分類と、エスペラント語との比較も入っています。</p>
+
+  <div class="fig">
+    <p class="fig-title">この研究の流れ</p>
+    <div class="chips2"><span>言語の分類</span><span class="arr">→</span><span>ちこ語の特徴</span><span class="arr">→</span><span>人工言語の分類</span><span class="arr">→</span><span>なぜ創るか</span><span class="arr">→</span><span class="big">羅生門と翻訳機</span></div>
+  </div>
 
   <section>
     <h2>1　言語の分け方：形態的分類</h2>
-    <p>言語は、単語の作られ方によって大きく4つに分けられます。絶対的な区分ではなく、「その傾向が強い」という見方です。</p>
+    <p>言語は、単語の作られ方によって、一般に大きく4つに分けられます。絶対的な区分ではなく、「その傾向が強い」という見方です。</p>
     <div class="fig">
       <p class="fig-title">言語の4つのタイプ</p>
       <div class="mini-grid">
@@ -29,56 +34,85 @@
       </div>
       <p class="fig-note">ちこ語は、緑の「膠着語」を軸にしています。</p>
     </div>
-    <h3>日本語は膠着語</h3>
-    <p>膠（にかわ＝接着剤）のように、語幹の後ろに機能語をつなげていきます。語幹は変わらず、つながる要素の意味がはっきりしていて、<mark>境目が分かりやすい</mark>のが特徴です。</p>
+    <p>日本語は膠着語です。膠（にかわ＝接着剤）のように、<b>形の変わらない語幹に機能語を付け加えていく</b>構造を持ちます。つながる要素の意味がはっきりしていて、<mark>境目が分かりやすい</mark>のが特徴です。</p>
     <div class="fig">
       <p class="fig-title">「食べられなかった」を分解する</p>
       <div class="stack"><span>食べ<small>語幹</small></span><span class="p">＋</span><span>られ<small>可能</small></span><span class="p">＋</span><span>なかっ<small>否定</small></span><span class="p">＋</span><span>た<small>過去</small></span></div>
     </div>
-    <p>膠着語の多くは SOV（主語・目的語・動詞）の語順で、動詞が最後に来ます。そのため時制は最後まで聞かないと分からず、後置詞が発達していて、主語と目的語が入れ替わっても意味が通じやすい傾向があります。</p>
-    <div class="box">
-      <p>ちこ語は、日本語話者の私が扱いやすいように、膠着語を軸にしました。助詞を独立させず、時制・名詞化・格をすべて語尾の接辞にして語に組み込む、<b>日本語よりさらに膠着的な言語</b>です。</p>
-    </div>
-    <p>言語を作るときは、最初に形態的分類を決めると、方向性が定まって作りやすくなります。</p>
+    <p>私が扱えないことには始まらないので、日本語を母語とする私が自然に理解できる構造を最優先にして、この言語を膠着語として設計しました。膠着語の多くは SOV の語順を持ち、動詞が最後に来るため、時制は最後まで聞かないと分かりません。後置詞が発達していて、主語と目的語が入れ替わっても通じやすい点も、日本語話者として自然に感じられました。</p>
   </section>
 
   <section>
-    <h2>2　人工言語の4つの種類</h2>
-    <p>目的や用途によって、人工言語は主に4つに分けられます。</p>
+    <h2>2　ちこ語の特徴</h2>
+    <div class="box">
+      <p>日本語では「が」「を」といった助詞が独立していますが、ちこ語では<b>助詞を独立させず、格・時制・名詞化といった文法機能をすべて接尾辞として語に統合</b>しました。日本語よりさらに膠着的な言語です。</p>
+    </div>
+    <p>格を示すために格変化を採用し、語尾に次のものを付けます。</p>
+    <div class="fig">
+      <p class="fig-title">格変化（語尾に付ける）</p>
+      <div class="mini-grid">
+        <div class="mini"><b>主格 ＋a</b><small>〜は・が<br>vair → vaira（神が）</small></div>
+        <div class="mini"><b>属格 ＋os</b><small>〜の<br>vair → vairos（神の）</small></div>
+        <div class="mini"><b>与格 ＋i</b><small>〜に<br>haij → haiji（村に）</small></div>
+        <div class="mini"><b>対格 ＋us</b><small>〜を<br>ab → abus（猫を）</small></div>
+        <div class="mini"><b>造格 ＋e</b><small>〜で・により<br>weip → weipe（水で）</small></div>
+      </div>
+    </div>
+    <p>他にも、複数形にするときや、動詞を名詞のように扱うときのルールがあります。形容詞は名詞を修飾し、その名詞と同じ格変化をして、関係性を分かりやすくしました。時制は三つ、さらに出来事の時間における段階（進行中・完了など）を示すアスペクトを設けています。</p>
+    <div class="fig">
+      <div class="mini-grid">
+        <div class="mini"><b>複数形 ＋er</b><small>hom → homer（人間たち）</small></div>
+        <div class="mini"><b>名詞化 ＋ik</b><small>動作を名詞のように。例外は ＋ip（もの）</small></div>
+        <div class="mini"><b>時制</b><small>現在＝基本形／未来＝＋y／過去＝＋is</small></div>
+        <div class="mini"><b>アスペクト</b><small>進行・反復＝＋wa／完了＝＋ja</small></div>
+      </div>
+    </div>
+    <div class="fig">
+      <p class="fig-title">接辞を重ねる：着たことは</p>
+      <div class="stack"><span>taom<small>着る</small></span><span class="p">＋</span><span>is<small>過去</small></span><span class="p">＋</span><span>ik<small>名詞化</small></span><span class="p">＋</span><span>a<small>主格</small></span><span class="p">＝</span><span>taomisika<small>着たことは</small></span></div>
+      <p class="fig-note">順序は主に ① アスペクト → ② 時制 → ③ 名詞化 → ④ 格変化（例外あり）。</p>
+    </div>
+    <div class="pull">最初に言語の分類を決めると、言語全体の方向性が定まる。</div>
+    <p>この構造が、ちこ語の強い膠着的特徴を表しています。方向性が決まると設計は楽になるので、言語を創るときには、ぜひ意識してみてください。詳しいルールは<a href="chiko_translator.html#grammar" style="color:var(--green2)">文法事項</a>にまとめています。</p>
+  </section>
+
+  <section>
+    <h2>3　人工言語の分類</h2>
+    <p>人工言語は、目的や用途によって4つに分けられます。</p>
     <div class="fig">
       <p class="fig-title">目的による4分類</p>
       <div class="mini-grid">
-        <div class="mini"><b>国際補助語</b><small>Auxlangs<br>母語の違う人どうしが意思疎通できるよう、文法や語彙を簡単・体系的にした言語</small></div>
         <div class="mini hi"><b>芸術言語</b><small>Artlangs<br>世界観・文化・感情の表現を重視し、物語や創作世界のために作る言語</small></div>
         <div class="mini"><b>論理・理論言語</b><small>Loglangs<br>曖昧さや多義性をなくし、論理的で厳密な意味表現ができるよう設計した言語</small></div>
         <div class="mini hi"><b>個人言語・秘密言語</b><small>Personal/Secret<br>自分や少人数だけで使うことを前提に、自己表現・共有・秘密のために作る言語</small></div>
+        <div class="mini"><b>国際補助語</b><small>Auxlangs<br>異なる母語の人々が、平等に意思疎通できるよう、文法や語彙を簡単・体系的にした言語</small></div>
       </div>
       <p class="fig-note">緑色が、ちこ語にあたる「芸術言語」と「個人言語」です。</p>
     </div>
   </section>
 
   <section>
-    <h2>3　代表例：エスペラント語</h2>
-    <p>1887年、ポーランドの医師ザメンホフが考案した国際補助語です。名前は彼のペンネームに由来し、<mark>「希望する人」</mark>という意味を持ちます。話者数は推定200万〜300万人です。</p>
+    <h2>4　代表例：エスペラント語</h2>
+    <p>国際補助語の代表がエスペラント語です。ポーランドの医師ザメンホフが、1887年に考案しました。彼のペンネームに由来し、<mark>「希望する人（希望を抱く者）」</mark>という意味を持ちます。ザメンホフは、ラテン語を復活させて国際語にすることを考えましたが、複雑すぎて断念しました。話者数は推定200万〜300万人程度で、旧約聖書やシェイクスピアなども翻訳されています。</p>
     <div class="fig">
       <p class="fig-title">エスペラント語の語彙の由来</p>
       <div class="bar-row"><span class="c1" style="width:70%">ラテン系言語 約70%</span><span class="c2" style="width:20%">ドイツ語 20%</span><span class="c3" style="width:10%">露 10%</span></div>
       <p class="fig-note">ラテン系言語はフランス語、スペイン語など。「露」はロシア語。</p>
     </div>
-    <p>ザメンホフはラテン語の復活が言語問題の解決策になると考えましたが、国際語にするには複雑すぎました。そんなとき、ロシア語の単語に共通の接尾辞があることに気づきます。接辞を使って一つの単語から単語群を作れば、覚える単語数を減らせる。それが、エスペラント語の大きな発想になりました。</p>
+    <p>ロシア語の単語に共通の接尾辞があることに気づいたザメンホフは、接辞を使って一つの単語から単語群を作れば、覚える単語数を減らせると考えました。</p>
   </section>
 
   <section>
-    <h2>4　エスペラント語とちこ語の比較</h2>
-    <p>調べるほど、エスペラント語はちこ語とよく似ていると分かりました。</p>
+    <h2>5　エスペラント語とちこ語の比較</h2>
+    <p>調べていくと、エスペラント語は、ちこ語とかなり似ている点がありました。</p>
     <div class="cmp">
       <div>
         <h3>共通点</h3>
         <ul>
-          <li>文法が体系化され、例外が少なく、語形変化が予測しやすい</li>
+          <li>文法規則が例外なく体系化され、語形変化が予測しやすい</li>
           <li>時制・品詞・文法上の役割を接辞ではっきり示す、膠着的な構造</li>
-          <li>語順や文法が論理的で、学習者にとって分かりやすい</li>
-          <li>接辞で単語を増やすため、覚える単語数が少なくてすむ</li>
+          <li>語順や文法が論理的で、学習者にとって分かりやすい（透明性が高い）</li>
+          <li>接辞で単語を増やすため、暗記する量が減る</li>
         </ul>
       </div>
       <div>
@@ -93,24 +127,71 @@
   </section>
 
   <section>
-    <h2>5　なぜ言語を創るのか</h2>
-    <div class="pull">一から言語を創って、自分の手で扱えて、それを一つの作品にできる。それが面白いから。</div>
-    <p>先行研究の方法をなぞるのではなく、必要最小限の理論だけを足がかりに、自分の発想で体系を組み立てていく。その過程そのものに面白さと価値を感じています。</p>
-    <p>言語を作ることは、<mark>世界の切り取り方を示すこと</mark>であり、自分の価値観の表現にもなると思っています。</p>
+    <h2>6　なぜ言語を創るのか</h2>
+    <div class="pull">一から言語を創り、それを自分で扱い、作品にする。その過程そのものが面白いから。</div>
+    <p>先行研究の方法をなぞるのではなく、<mark>最小限の理論的知識だけを足場に、自分の発想で体系を組み立てる</mark>こと。それが、こだわった点です。ちこ語は芸術言語であり、同時に個人言語でもあります。</p>
+    <p>言語を作ることは、世界の切り取り方を示すことであり、自分の価値観の表現にもなると思っています。</p>
   </section>
 
   <section>
-    <h2>6　羅生門を翻訳した理由</h2>
-    <p>言語を創り始めた動機は純粋な興味で、明確な目的があったわけではありません。そこで、無理に意味づけをせず、目に見える成果として作品を完成させたいと考え、芥川龍之介の「羅生門」をちこ語に翻訳することにしました。作品は次の3つの条件で選びました。</p>
+    <h2>7　羅生門の翻訳</h2>
+    <p>言語を創るだけ創っては虚しく、何か作品を残したいと思いました。もともとの動機は純粋な興味で、明確な目的や理論的必然性があったわけではありません。だから無理に意味づけをせず、目に見える成果として作品を完成させたいと考えました。そこで、言語作成の集大成として「翻訳」という形で表現することにしました。翻訳機の作成も並行して進めています。</p>
     <div class="fig">
-      <p class="fig-title">原書選びの3条件</p>
+      <p class="fig-title">原書選びの3条件 → 芥川龍之介『羅生門』</p>
       <div class="mini-grid">
         <div class="mini"><b>① 短編小説</b><small>翻訳には膨大な時間がかかるため</small></div>
         <div class="mini"><b>② 好きな作品</b><small>海外作品は「翻訳の翻訳」になるため断念</small></div>
         <div class="mini"><b>③ 多くの人が知っている</b><small>教科書で読んだ作品</small></div>
       </div>
     </div>
-    <p>翻訳の中身は<a href="chiko_translator.html#rashoumon" style="color:var(--green2)">羅生門のページ</a>、翻訳機は<a href="chiko_translator.html#translate" style="color:var(--green2)">翻訳機のページ</a>で見られます。</p>
+    <p>翻訳できている部分は、<a href="chiko_translator.html#rashoumon" style="color:var(--green2)">羅生門のページ</a>で、原文・ちこ語訳・直訳を並べて読めます。</p>
+
+    <h3>翻訳の手順</h3>
+    <div class="fig">
+      <ul class="tl">
+        <li><span class="yr">① 原文を用意する</span>翻訳したい文を決める。</li>
+        <li><span class="yr">② 足りない単語を作る</span>対応できない語が出てきたら、新しく単語を作る。この工程が最も時間がかかる。</li>
+        <li><span class="yr">③ 文法に背かないよう組み合わせる</span>作った単語を文法どおりにつなげる。単語を知らなくても、文中での役割が分かるようになっている。</li>
+      </ul>
+    </div>
+
+    <h3>単語を作るときのルール</h3>
+    <div class="fig">
+      <div class="mini-grid">
+        <div class="mini"><b>子音で終わる</b><small>名詞・形容詞・動詞（母音で始まる格や時制を付けるため）</small></div>
+        <div class="mini"><b>母音で終わる</b><small>副詞・接続詞（格変化せず、発音しやすいため）</small></div>
+        <div class="mini"><b>「-」で表示</b><small>直前の単語にくっつけて使う言葉は、前にハイフン</small></div>
+        <div class="mini"><b>「’」は伸ばす音</b><small>発音記号として設定</small></div>
+      </div>
+      <p class="fig-note">単語はフィーリングと語感の良さで組んでいます。既存の言語は参考にしていませんが、結果的に似た形になったことが2、3回ありました。</p>
+    </div>
+
+    <h3>実際に読んでみよう</h3>
+    <p>次の一文を、下の単語と文法事項で考えてみてください。</p>
+    <div class="fig">
+      <p class="fig-title">原文：そこで洛中のさびれ方は一通りではない。</p>
+      <div class="ex">Rakuchuos batikos nidepa exi-un-fet-epa.</div>
+      <div class="mini-grid">
+        <div class="mini"><b>Rakuchu＋os</b><small>洛中の（属格）</small></div>
+        <div class="mini"><b>bat＋ik＋os</b><small>衰える＋名詞化＋属格＝衰えることの</small></div>
+        <div class="mini"><b>nidep＋a</b><small>様子・有様＋主格</small></div>
+        <div class="mini"><b>exi- ＋ un ＋ -fet ＋ -epa</b><small>〜ない＋一つ＋〜だけ＋〜では</small></div>
+      </div>
+      <p class="fig-note">直訳：洛中の衰えることの有様は、一つだけではない。単純に感じませんか。語順もあり、直感的に理解しやすいのです。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>8　今後の予定</h2>
+    <div class="fig">
+      <div class="mini-grid">
+        <div class="mini hi"><b>羅生門を訳し終える</b><small>翻訳を最後まで進める</small></div>
+        <div class="mini hi"><b>文法規則のブラッシュアップ</b><small>ルールを磨く</small></div>
+        <div class="mini hi"><b>単語を作り続ける</b><small>語彙を増やす</small></div>
+      </div>
+    </div>
+    <p>翻訳ができるサイトも作っていて、現段階では、簡単な文章なら生成できるところまで進みました。→ <a href="chiko_translator.html#translate" style="color:var(--green2)">翻訳機を試す</a></p>
+    <div class="pull">言語作成は、世界の切り取り方を示す、自分の価値観の表現にもなる。</div>
   </section>
 
   <section>
